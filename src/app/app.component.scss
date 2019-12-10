@@ -1,0 +1,44 @@
+@import "../variables";
+
+.header {
+  background: snow;
+  color: $black;
+  height: 9%;
+
+  .picker {
+    font-size: medium;
+    margin-right: 1rem;
+    color: $accent;
+  }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 38.2% auto;
+  grid-template-rows: 1fr;
+  grid-template-areas: "ui-screen-area blueprint-area";
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.ui-screen-area {
+  grid-area: ui-screen-area;
+}
+
+.blueprint-area {
+  display: grid;
+  grid-template-columns: 1fr 38.2%;
+  grid-template-rows: 1fr;
+  grid-template-areas: "blu buttons";
+  grid-area: blueprint-area;
+}
+
+.blueprint {
+  grid-area: blueprint;
+}
+
+.button-area {
+  grid-area: button-area;
+}
