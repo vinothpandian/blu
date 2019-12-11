@@ -207,4 +207,5 @@ ipython_config.py
 
 
 **/*dataset*/**/*
+**/*annotated*/**/*
 **/venv

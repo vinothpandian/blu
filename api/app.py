@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 blu_path = Path("./blu")
-dataset_path = blu_path.joinpath("dataset")
+dataset_path = blu_path.joinpath("annotated")
 
 dataset_details = pd.read_csv(blu_path.joinpath("dataset.csv"))
 
@@ -33,12 +33,6 @@ def get_app_names(category):
         app_names[v['name']].append(v["filename"])
     return jsonify(app_names)
 
-
-@app.route('/api/get-image/<category>/<app_name>/<filename>')
-def get_image(category, app_name, filename):
-    image_file_path = dataset_path.joinpath(
-        category, app_name, f"{filename}.jpg").as_posix()
-    return send_file(image_file_path, mimetype='image/jpg')
 
 
 @app.route('/api/get-annotation/<category>/<app_name>/<filename>')
