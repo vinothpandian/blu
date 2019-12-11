@@ -1,27 +1,4 @@
-<mat-toolbar class="header">
-  <span>Blu - Blueprint generator</span>
-  <span class="spacer"></span>
-  <span class="picker">
-    <mat-form-field>
-      <mat-label>App category</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let food of foods" [value]="food.value">
-          {{ food.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </span>
-  <span class="picker">
-    <mat-form-field>
-      <mat-label>Favorite food</mat-label>
-      <mat-select>
-        <mat-option *ngFor="let food of foods" [value]="food.value">
-          {{ food.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </span>
-</mat-toolbar>
+<app-appbar></app-appbar>
 <div class="grid-container">
   <div class="ui-screen-area"></div>
   <div class="blueprint-area">

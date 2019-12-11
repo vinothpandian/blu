@@ -18,7 +18,7 @@ $blu-accent: mat-palette($mat-orange, A200, A100, A400);
 $blu-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$blu-theme: mat-dark-theme($blu-primary, $blu-accent, $blu-warn);
+$blu-theme: mat-light-theme($blu-primary, $blu-accent, $blu-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

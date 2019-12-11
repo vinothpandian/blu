@@ -1,0 +1,21 @@
+@import "../../variables";
+
+.header {
+  background: snow;
+  color: $black;
+  height: 9%;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .picker {
+    font-size: medium;
+    margin-right: 1rem;
+    width: 20rem;
+
+    mat-form-field {
+      width: 80%;
+    }
+  }
+}

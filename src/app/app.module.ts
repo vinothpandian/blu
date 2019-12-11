@@ -4,20 +4,52 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatButtonModule } from "@angular/material/button";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatSelectModule } from "@angular/material/select";
+
+import { HttpClientModule } from "@angular/common/http";
+
+// ******** Angular Material modules *********
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatCardModule,
+  MatDividerModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule,
+  MatSelectModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatProgressSpinnerModule,
+  MatSliderModule
+} from "@angular/material";
+
+import { AppbarComponent } from "./appbar/appbar.component";
+import { DisplayCasePipe } from "./pipes/display-case.pipe";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, AppbarComponent, DisplayCasePipe],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
 
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+
+    MatAutocompleteModule,
     MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatSelectModule,
     MatToolbarModule,
-    MatSelectModule
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
