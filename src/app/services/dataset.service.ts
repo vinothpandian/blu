@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, combineAll, concatAll, map } from "rxjs/operators";
 
 import { environment } from "../../environments/environment";
 import { Categories } from "../@types/categories";
 import { AppNames } from "../@types/app-names";
+import { Annotations } from "../@types/annotation";
 
 @Injectable({
   providedIn: "root"
@@ -29,16 +30,42 @@ export class DatasetService {
   getImage(
     category: string,
     appName: string,
-    filename: string
+    filename: number
   ): Observable<Blob> {
     const _category = category.replace(/\s/g, "_");
     const _appName = appName.replace(/\s/g, "_");
 
-    return this.http.get(
-      `${environment.datasetUrl}/get-image/${_category}/${_appName}/${filename}`,
-      { responseType: "blob" }
+    return this.http
+      .get(
+        `${environment.datasetUrl}/get-image/${_category}/${_appName}/${filename}`,
+        { responseType: "blob" }
+      )
+      .pipe(catchError(this.handleError<Blob>("getAppNames")));
+  }
+
+  getAnnotations(
+    category: string,
+    appName: string,
+    filename: number
+  ): Observable<Annotations> {
+    const _category = category.replace(/\s/g, "_");
+    const _appName = appName.replace(/\s/g, "_");
+
+    return this.http
+      .get<Annotations>(
+        `${environment.datasetUrl}/get-annotation/${_category}/${_appName}/${filename}`
+      )
+      .pipe(catchError(this.handleError<Annotations>("getAnnotations")));
+  }
+
+  getImages(category: string, appName: string, filenames: number[]) {
+    const requests = filenames.map(filename =>
+      this.getImage(category, appName, filename)
     );
-    // .pipe(catchError(this.handleError<Blob>("getAppNames")));
+
+    const source = of(...requests);
+
+    return source.pipe(concatAll());
   }
 
   /**

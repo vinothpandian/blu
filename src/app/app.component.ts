@@ -15,14 +15,18 @@ export class AppComponent implements OnInit {
 
   appNames: AppNames = {};
   appNameList: string[] = [];
-  imageSource = null;
+
+  images = {};
 
   constructor(private datasetService: DatasetService) {}
 
   ngOnInit() {
-    this.datasetService.getCategories().subscribe(categories => {
-      this.categories = categories.map(category => category.replace(/_/g, " "));
-    });
+    // this.datasetService.getCategories().subscribe(categories => {
+    //   this.categories = categories.map(category => category.replace(/_/g, " "));
+    // });
+
+    // Debug
+    this.categoryChosen("Social");
   }
 
   categoryChosen(category: string) {
@@ -35,22 +39,30 @@ export class AppComponent implements OnInit {
         this.appNameList = Object.keys(appNames).map(name =>
           name.replace(/_/g, " ")
         );
+
+        // Debug
+        this.appNameChosen(["Social", "ASKfm"]);
       });
   }
 
   appNameChosen([category, appName]: [string, string]) {
-    this.datasetService.getImage(category, appName, "1").subscribe(image => {
-      let reader = new FileReader();
-      reader.addEventListener(
-        "load",
-        () => {
-          this.imageSource = reader.result;
-        },
-        false
-      );
-      if (image) {
-        reader.readAsDataURL(image);
-      }
-    });
+    const name = appName.replace(/\s/g, "_");
+    const filenames = this.appNames[name];
+
+    this.datasetService
+      .getImages(category, appName, filenames)
+      .subscribe((image: Blob) => {
+        let reader = new FileReader();
+        reader.addEventListener(
+          "load",
+          () => {
+            this.images.push(reader.result);
+          },
+          false
+        );
+        if (image) {
+          reader.readAsDataURL(image);
+        }
+      });
   }
 }
