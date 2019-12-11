@@ -1,28 +1,10 @@
 @import "../variables";
 
+//  grid.layoutit.com?id=jyXwDTC
+
 .grid-container {
   display: grid;
-  grid-template-columns: 38.2% auto;
+  grid-template-columns: 15% 35% 35% 15fr;
   grid-template-rows: 1fr;
-  grid-template-areas: "ui-screen-area blueprint-area";
-}
-
-.ui-screen-area {
-  grid-area: ui-screen-area;
-}
-
-.blueprint-area {
-  display: grid;
-  grid-template-columns: 1fr 38.2%;
-  grid-template-rows: 1fr;
-  grid-template-areas: "blu buttons";
-  grid-area: blueprint-area;
-}
-
-.blueprint {
-  grid-area: blueprint;
-}
-
-.button-area {
-  grid-area: button-area;
+  grid-template-areas: ". . . .";
 }

@@ -1,9 +1,12 @@
-<app-appbar></app-appbar>
+<app-appbar
+  [categories]="categories"
+  [appNameList]="appNameList"
+  (categoryChosen)="categoryChosen($event)"
+  (appNameChosen)="appNameChosen($event)"
+></app-appbar>
 <div class="grid-container">
-  <div class="ui-screen-area"></div>
-  <div class="blueprint-area">
-    <div class="blueprint"></div>
-
-    <div class="button-area"></div>
-  </div>
+  <app-ui-list-area></app-ui-list-area>
+  <div class="ui-screen-area">b</div>
+  <div class="blueprint-area">c</div>
+  <div class="button-area"></div>
 </div>

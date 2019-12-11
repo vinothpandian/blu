@@ -26,9 +26,10 @@ import {
 import { AppbarComponent } from "./appbar/appbar.component";
 import { DisplayCasePipe } from "./pipes/display-case.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { UiListAreaComponent } from './ui-list-area/ui-list-area.component';
 
 @NgModule({
-  declarations: [AppComponent, AppbarComponent, DisplayCasePipe],
+  declarations: [AppComponent, AppbarComponent, DisplayCasePipe, UiListAreaComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

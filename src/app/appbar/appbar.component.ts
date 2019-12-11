@@ -1,11 +1,7 @@
-import { Component, OnInit } from "@angular/core";
-import { DatasetService } from "../services/dataset.service";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Categories } from "../@types/categories";
 import { FormControl } from "@angular/forms";
-import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
 import { AppNames } from "../@types/app-names";
-import isEmpty from "lodash/fp/isEmpty";
 
 @Component({
   selector: "app-appbar",
@@ -13,21 +9,18 @@ import isEmpty from "lodash/fp/isEmpty";
   styleUrls: ["./appbar.component.scss"]
 })
 export class AppbarComponent implements OnInit {
-  categories: Categories = [];
+  @Input() categories: Categories;
   categoryControl = new FormControl();
 
-  appNames: AppNames = {};
-  appNameList: string[] = [];
+  @Output() categoryChosen = new EventEmitter<string>();
+  @Output() appNameChosen = new EventEmitter<[string, string]>();
+
+  @Input() appNameList: string[];
   appNameControl = new FormControl();
 
-  constructor(private datasetService: DatasetService) {}
+  constructor() {}
 
   ngOnInit() {
-    this.datasetService.getCategories().subscribe(categories => {
-      this.categories = categories.map(category => category.replace(/_/g, " "));
-      this.categoryControl.setValue(this.categories[0]);
-    });
-
     this.appNameControl.disable();
 
     this.categoryControl.valueChanges.subscribe((value: string) => {
@@ -36,19 +29,20 @@ export class AppbarComponent implements OnInit {
         return;
       }
 
-      this.datasetService
-        .getAppNames(this.categoryControl.value)
-        .subscribe((appNames: AppNames) => {
-          if (isEmpty(appNames)) return;
+      this.appNameControl.reset();
+      this.appNameControl.enable();
+      this.categoryChosen.emit(this.categoryControl.value);
+    });
 
-          this.appNameControl.enable();
+    this.appNameControl.valueChanges.subscribe((value: string) => {
+      if (!this.appNameList.includes(value)) {
+        return;
+      }
 
-          this.appNames = appNames;
-          this.appNameList = Object.keys(appNames).map(name =>
-            name.replace(/_/g, " ")
-          );
-          this.appNameControl.setValue(this.appNameList[0]);
-        });
+      this.appNameChosen.emit([
+        this.categoryControl.value,
+        this.appNameControl.value
+      ]);
     });
   }
 }

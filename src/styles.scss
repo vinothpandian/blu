@@ -26,7 +26,6 @@ $blu-theme: mat-light-theme($blu-primary, $blu-accent, $blu-warn);
 @include angular-material-theme($blu-theme);
 
 /* You can add global styles to this file, and also import other style files */
-//  grid.layoutit.com?id=jyXwDTC
 
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
 
