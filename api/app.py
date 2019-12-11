@@ -21,32 +21,36 @@ categories = list(dataset_details["category"].unique())
 
 @app.route("/api/categories")
 def get_categories():
-  return jsonify(categories)
+    return jsonify(categories)
 
 
 @app.route("/api/app-names/<category>")
 def get_app_names(category):
-  data = dataset_details[dataset_details["category"] == category]
-  data_dict = data.drop(columns=['category']).to_dict(orient='records')
-  app_names = defaultdict(list)
-  for v in data_dict:
-    app_names[v['name']].append(v["filename"])
-  return jsonify(app_names)
+    data = dataset_details[dataset_details["category"] == category]
+    data_dict = data.drop(columns=['category']).to_dict(orient='records')
+    app_names = defaultdict(list)
+    for v in data_dict:
+        app_names[v['name']].append(v["filename"])
+    return jsonify(app_names)
 
 
 @app.route('/api/get-image/<category>/<app_name>/<filename>')
 def get_image(category, app_name, filename):
-  image_file_path = dataset_path.joinpath(category, app_name, f"{filename}.jpg").as_posix()
-  return send_file(image_file_path, mimetype='image/jpg')
+    image_file_path = dataset_path.joinpath(
+        category, app_name, f"{filename}.jpg").as_posix()
+    return send_file(image_file_path, mimetype='image/jpg')
+
 
 @app.route('/api/get-annotation/<category>/<app_name>/<filename>')
 def get_annotation(category, app_name, filename):
-  annotation_file_path = dataset_path.joinpath(category, app_name, f"{filename}.json").as_posix()
+    annotation_file_path = dataset_path.joinpath(
+        category, app_name, f"annotation_{filename}.json").as_posix()
 
-  with open(annotation_file_path, "r") as f:
-    data = json.load(f)
+    with open(annotation_file_path, "r") as f:
+        data = json.load(f)
 
-  return jsonify(data)
+    return jsonify(data)
+
 
 if __name__ == "__main__":
-  app.run(host="0.0.0.0", debug=True, port=5000, load_dotenv=".env")
+    app.run(host="0.0.0.0", debug=True, port=5000, load_dotenv=".env")

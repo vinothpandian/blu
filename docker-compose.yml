@@ -1,0 +1,10 @@
+version: "3.5"
+
+services:
+  api:
+    container_name: blu-api
+    build:
+      context: "./api"
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
