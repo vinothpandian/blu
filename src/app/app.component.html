@@ -1,12 +1,7 @@
-<app-appbar
-  [categories]="categories"
-  [appNameList]="appNameList"
-  (categoryChosen)="categoryChosen($event)"
-  (appNameChosen)="appNameChosen($event)"
-></app-appbar>
+<app-appbar></app-appbar>
 <div class="grid-container">
-  <app-ui-list-area [thumbnails]="images"></app-ui-list-area>
-  <div class="ui-screen-area"><img [src]="imageSource" /></div>
+  <app-ui-list-area></app-ui-list-area>
+  <div class="ui-screen-area"></div>
   <div class="blueprint-area">c</div>
   <div class="button-area"></div>
 </div>

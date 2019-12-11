@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Categories } from "../@types/categories";
 import { FormControl } from "@angular/forms";
 import { AppNames } from "../@types/app-names";
+import { DatasetService } from "../services/dataset.service";
 
 @Component({
   selector: "app-appbar",
@@ -9,16 +10,21 @@ import { AppNames } from "../@types/app-names";
   styleUrls: ["./appbar.component.scss"]
 })
 export class AppbarComponent implements OnInit {
-  @Input() categories: Categories;
+  categories: Categories = [];
   categoryControl = new FormControl();
 
-  @Output() categoryChosen = new EventEmitter<string>();
-  @Output() appNameChosen = new EventEmitter<[string, string]>();
-
-  @Input() appNameList: string[];
+  appNameList: string[] = [];
   appNameControl = new FormControl();
 
-  constructor() {}
+  constructor(private datasetService: DatasetService) {
+    this.datasetService.categoryList.subscribe(categories => {
+      this.categories = categories;
+    });
+
+    this.datasetService.appNameList.subscribe(appNameList => {
+      this.appNameList = appNameList;
+    });
+  }
 
   ngOnInit() {
     this.appNameControl.disable();
@@ -31,7 +37,7 @@ export class AppbarComponent implements OnInit {
 
       this.appNameControl.reset();
       this.appNameControl.enable();
-      this.categoryChosen.emit(this.categoryControl.value);
+      this.datasetService.setCategory(this.categoryControl.value);
     });
 
     this.appNameControl.valueChanges.subscribe((value: string) => {
@@ -39,10 +45,7 @@ export class AppbarComponent implements OnInit {
         return;
       }
 
-      this.appNameChosen.emit([
-        this.categoryControl.value,
-        this.appNameControl.value
-      ]);
+      this.datasetService.setAppName(this.appNameControl.value);
     });
   }
 }

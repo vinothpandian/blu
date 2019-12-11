@@ -1,3 +1,4 @@
-<div *ngFor="let thumbnail of thumbnails">
-  <img src="[thumbnail]" alt="Thumbnail" />
+<div *ngFor="let imageName of imageNames">
+  <!-- <img src="[filename]" alt="filename" /> -->
+  <img [src]="imageName" alt="Thumbnail" />
 </div>

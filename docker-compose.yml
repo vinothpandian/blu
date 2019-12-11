@@ -8,3 +8,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+
+  nginx:
+    container_name: blu-nginx
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    volumes:
+      - ./api/blu/dataset:/var/www/dataset
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "8000:80"
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''

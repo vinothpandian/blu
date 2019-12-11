@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { DatasetService } from "../services/dataset.service";
 
 @Component({
   selector: "app-ui-list-area",
@@ -6,9 +7,12 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./ui-list-area.component.scss"]
 })
 export class UiListAreaComponent implements OnInit {
-  constructor() {}
-
-  @Input() thumbnails: Blob[] = [];
+  imageNames: string[] = [];
+  constructor(private datasetService: DatasetService) {
+    this.datasetService.imageNames.subscribe(imageNames => {
+      this.imageNames = imageNames;
+    });
+  }
 
   ngOnInit() {}
 }
