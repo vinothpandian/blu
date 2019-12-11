@@ -3,19 +3,27 @@
 .header {
   background: $dark;
   color: snow;
-  height: 9%;
+  height: 100%;
+  display: flex;
 
-  .spacer {
-    flex: 1 1 auto;
+  .pickers {
+    display: flex;
+    flex: 1;
+
+    .picker {
+      font-size: medium;
+      margin-right: 1rem;
+      width: 20rem;
+
+      mat-form-field {
+        width: 16rem;
+        padding-right: 4rem;
+      }
+    }
   }
 
-  .picker {
-    font-size: medium;
-    margin-right: 1rem;
-    width: 20rem;
-
-    mat-form-field {
-      width: 80%;
-    }
+  .title {
+    display: flex;
+    flex: auto;
   }
 }

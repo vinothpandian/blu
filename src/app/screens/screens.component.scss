@@ -1,0 +1,22 @@
+.screens-container {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 45% 45% 10%;
+  grid-template-areas: ". . .";
+  height: 100%;
+
+  [class$="-area"] {
+    display: flex;
+    flex: 1;
+    place-content: center;
+    place-items: center;
+    height: 100%;
+  }
+}
+
+.canvasClass {
+  background-size: contain;
+  border: 1px solid red;
+  width: 22.5rem;
+  height: 40rem;
+}

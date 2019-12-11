@@ -1,14 +1,16 @@
-.ui-list {
-  display: flex;
-  justify-content: center;
-  border-right: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
+.ui-list-container {
+  .ui-list {
+    display: flex;
+    justify-content: center;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
 
-  img {
-    width: 60%;
-    margin: 2rem 0;
-    border: 1px solid #ccc;
-    border-radius: 2px;
+    img {
+      width: 60%;
+      margin: 2rem 0;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+    }
   }
 }

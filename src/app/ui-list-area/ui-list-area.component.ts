@@ -15,4 +15,8 @@ export class UiListAreaComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  listClicked(index: number) {
+    this.datasetService.setFilename(index + 1);
+  }
 }

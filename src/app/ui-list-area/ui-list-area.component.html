@@ -1,4 +1,11 @@
-<div matRipple class="ui-list" *ngFor="let imageName of imageNames">
-  <img [src]="imageName" alt="Thumbnail" />
-  <mat-divider></mat-divider>
+<div class="ui-list-container">
+  <div
+    matRipple
+    class="ui-list"
+    *ngFor="let imageName of imageNames; let i = index"
+    (click)="listClicked(i)"
+  >
+    <img [src]="imageName" [alt]="'Thumbnail' + i" />
+    <mat-divider></mat-divider>
+  </div>
 </div>

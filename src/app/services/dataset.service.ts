@@ -26,7 +26,7 @@ export class DatasetService {
     return this._appNameList.asObservable();
   }
 
-  private _currentFilenameList: number[] = [];
+  private _currentFilenames: number[] = [];
   private _filenames: BehaviorSubject<number[]> = new BehaviorSubject([]);
   get filenames(): Observable<number[]> {
     return this._filenames.asObservable();
@@ -53,6 +53,18 @@ export class DatasetService {
   private _filename: BehaviorSubject<number> = new BehaviorSubject(-1);
   get filename(): Observable<number> {
     return this._filename.asObservable();
+  }
+
+  private _currentImagePath = "";
+  private _imagePath: BehaviorSubject<string> = new BehaviorSubject("");
+  get imagePath(): Observable<string> {
+    return this._imagePath.asObservable();
+  }
+
+  private _currentAnnotation: Annotations = {};
+  private _annotation: BehaviorSubject<Annotations> = new BehaviorSubject({});
+  get annotation(): Observable<Annotations> {
+    return this._annotation.asObservable();
   }
 
   constructor(private http: HttpClient) {
@@ -86,10 +98,12 @@ export class DatasetService {
 
       this._appNameList.next(appNameList);
 
-      this._currentAppName = this.appNameList[0];
-      this._appName.next(this._currentAppName);
+      this.setAppName(appNameList[0]);
     });
   }
+
+  getImagePath = (filename: number) =>
+    getPath(this._currentCategory, this._currentAppName, filename);
 
   setAppName(appName: string) {
     this._currentAppName = appName;
@@ -97,19 +111,33 @@ export class DatasetService {
 
     const dirAppName = dirCase(this._currentAppName);
 
-    this._currentFilenameList = this._appNames[dirAppName];
-    this._filenames.next(this._currentFilenameList);
+    this._currentFilenames = this._appNames[dirAppName];
+    this._filenames.next(this._currentFilenames);
 
-    const imageNames = this._currentFilenameList.map(filename => {
-      return getPath(this._currentCategory, this._currentAppName, filename);
+    const imageNames = this._currentFilenames.map(filename => {
+      return this.getImagePath(filename);
     });
 
     this._imageNames.next(imageNames);
+
+    this.setFilename(this._currentFilenames[0]);
   }
 
   setFilename(filename: number) {
     this._currentFilename = filename;
     this._filename.next(this._currentFilename);
+
+    this._currentImagePath = this.getImagePath(this._currentFilename);
+    this._imagePath.next(this._currentImagePath);
+
+    this.getAnnotations(
+      this._currentCategory,
+      this._currentAppName,
+      this._currentFilename
+    ).subscribe((annotations: Annotations) => {
+      this._currentAnnotation = annotations;
+      this._annotation.next(this._currentAnnotation);
+    });
   }
 
   getAppNames(category: string): Observable<AppNames> {
@@ -124,8 +152,8 @@ export class DatasetService {
     appName: string,
     filename: number
   ): Observable<Annotations> {
-    const _category = category.replace(/\s/g, "_");
-    const _appName = appName.replace(/\s/g, "_");
+    const _category = dirCase(category);
+    const _appName = dirCase(appName);
 
     return this.http
       .get<Annotations>(

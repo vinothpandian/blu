@@ -1,43 +1,43 @@
 <mat-toolbar class="header">
-  <span>Blu - Blueprint generator</span>
+  <div class="pickers">
+    <span class="picker">
+      <mat-form-field>
+        <mat-label>Choose app category</mat-label>
+        <input
+          type="text"
+          placeholder="Choose App Category"
+          aria-label="Category"
+          matInput
+          [formControl]="categoryControl"
+          [matAutocomplete]="autoCategory"
+        />
+        <mat-autocomplete #autoCategory="matAutocomplete">
+          <mat-option *ngFor="let option of categories" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </span>
 
-  <span class="spacer"></span>
+    <span class="picker">
+      <mat-form-field>
+        <mat-label>Choose app name</mat-label>
+        <input
+          type="text"
+          placeholder="Choose App Name"
+          aria-label="App Name"
+          matInput
+          [formControl]="appNameControl"
+          [matAutocomplete]="autoAppName"
+        />
+        <mat-autocomplete #autoAppName="matAutocomplete">
+          <mat-option *ngFor="let option of appNameList" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </span>
+  </div>
 
-  <span class="picker">
-    <mat-form-field>
-      <mat-label>Choose app category</mat-label>
-      <input
-        type="text"
-        placeholder="Choose App Category"
-        aria-label="Category"
-        matInput
-        [formControl]="categoryControl"
-        [matAutocomplete]="autoCategory"
-      />
-      <mat-autocomplete #autoCategory="matAutocomplete">
-        <mat-option *ngFor="let option of categories" [value]="option">
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </span>
-
-  <span class="picker">
-    <mat-form-field>
-      <mat-label>Choose app name</mat-label>
-      <input
-        type="text"
-        placeholder="Choose App Name"
-        aria-label="App Name"
-        matInput
-        [formControl]="appNameControl"
-        [matAutocomplete]="autoAppName"
-      />
-      <mat-autocomplete #autoAppName="matAutocomplete">
-        <mat-option *ngFor="let option of appNameList" [value]="option">
-          {{ option }}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-  </span>
+  <div class="title">Blu : Blueprint generator</div>
 </mat-toolbar>
