@@ -59,6 +59,9 @@ export class DatasetService {
     this.getCategories().subscribe(categories => {
       this._categories = categories.map(category => displayCase(category));
       this._categoryList.next(this._categories);
+
+      this._currentCategory = this._categories[0];
+      this._category.next(this._currentCategory);
     });
   }
 
@@ -82,6 +85,9 @@ export class DatasetService {
       );
 
       this._appNameList.next(appNameList);
+
+      this._currentAppName = this.appNameList[0];
+      this._appName.next(this._currentAppName);
     });
   }
 

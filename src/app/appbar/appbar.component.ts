@@ -19,10 +19,12 @@ export class AppbarComponent implements OnInit {
   constructor(private datasetService: DatasetService) {
     this.datasetService.categoryList.subscribe(categories => {
       this.categories = categories;
+      this.categoryControl.setValue(this.categories[0]);
     });
 
     this.datasetService.appNameList.subscribe(appNameList => {
       this.appNameList = appNameList;
+      this.appNameControl.setValue(this.appNameList[0]);
     });
   }
 

@@ -20,16 +20,23 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatProgressSpinnerModule,
-  MatSliderModule
+  MatSliderModule,
+  MatListModule,
+  MatRippleModule
 } from "@angular/material";
 
 import { AppbarComponent } from "./appbar/appbar.component";
 import { DisplayCasePipe } from "./pipes/display-case.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { UiListAreaComponent } from './ui-list-area/ui-list-area.component';
+import { UiListAreaComponent } from "./ui-list-area/ui-list-area.component";
 
 @NgModule({
-  declarations: [AppComponent, AppbarComponent, DisplayCasePipe, UiListAreaComponent],
+  declarations: [
+    AppComponent,
+    AppbarComponent,
+    DisplayCasePipe,
+    UiListAreaComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -50,7 +57,9 @@ import { UiListAreaComponent } from './ui-list-area/ui-list-area.component';
     MatToolbarModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    MatSliderModule
+    MatSliderModule,
+    MatListModule,
+    MatRippleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
