@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { DatasetService } from "./services/dataset.service";
 import { Categories } from "./@types/categories";
 import { AppNames } from "./@types/app-names";
@@ -11,9 +11,11 @@ import isEmpty from "lodash/fp/isEmpty";
 })
 export class AppComponent implements OnInit {
   categories: Categories = [];
+  @ViewChild("heroImage", { static: false }) image: ElementRef;
 
   appNames: AppNames = {};
   appNameList: string[] = [];
+  imageSource = null;
 
   constructor(private datasetService: DatasetService) {}
 
@@ -37,6 +39,18 @@ export class AppComponent implements OnInit {
   }
 
   appNameChosen([category, appName]: [string, string]) {
-    console.log(category, appName);
+    this.datasetService.getImage(category, appName, "1").subscribe(image => {
+      let reader = new FileReader();
+      reader.addEventListener(
+        "load",
+        () => {
+          this.imageSource = reader.result;
+        },
+        false
+      );
+      if (image) {
+        reader.readAsDataURL(image);
+      }
+    });
   }
 }

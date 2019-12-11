@@ -19,11 +19,26 @@ export class DatasetService {
       .pipe(catchError(this.handleError<Categories>("getCategories", [])));
   }
 
-  getAppNames(value: string): Observable<AppNames> {
-    const category = value.replace(/\s/g, "_");
+  getAppNames(category: string): Observable<AppNames> {
+    const _category = category.replace(/\s/g, "_");
     return this.http
-      .get<AppNames>(`${environment.datasetUrl}/app-names/${category}`)
+      .get<AppNames>(`${environment.datasetUrl}/app-names/${_category}`)
       .pipe(catchError(this.handleError<AppNames>("getAppNames", {})));
+  }
+
+  getImage(
+    category: string,
+    appName: string,
+    filename: string
+  ): Observable<Blob> {
+    const _category = category.replace(/\s/g, "_");
+    const _appName = appName.replace(/\s/g, "_");
+
+    return this.http.get(
+      `${environment.datasetUrl}/get-image/${_category}/${_appName}/${filename}`,
+      { responseType: "blob" }
+    );
+    // .pipe(catchError(this.handleError<Blob>("getAppNames")));
   }
 
   /**
