@@ -80,12 +80,14 @@ export class ScreensComponent implements OnInit {
             return {
               x,
               y,
+              x1,
+              y1,
               width: x1 - x,
               height: y1 - y
             };
           });
 
-          return { ...prev, [key]: boundsList };
+          return { ...prev, [key.toLowerCase()]: boundsList };
         },
         {}
       );

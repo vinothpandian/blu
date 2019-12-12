@@ -30,6 +30,10 @@ import { DisplayCasePipe } from "./pipes/display-case.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UiListAreaComponent } from "./ui-list-area/ui-list-area.component";
 import { ScreensComponent } from './screens/screens.component';
+import { ButtonComponent } from './elements/button/button.component';
+import { IconComponent } from './elements/icon/icon.component';
+import { TextComponent } from './elements/text/text.component';
+import { AdvertisementComponent } from './elements/advertisement/advertisement.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,11 @@ import { ScreensComponent } from './screens/screens.component';
     AppbarComponent,
     DisplayCasePipe,
     UiListAreaComponent,
-    ScreensComponent
+    ScreensComponent,
+    ButtonComponent,
+    IconComponent,
+    TextComponent,
+    AdvertisementComponent
   ],
   imports: [
     BrowserModule,

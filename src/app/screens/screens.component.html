@@ -1,6 +1,6 @@
 <div class="screens-container">
   <div class="ui-screen-area">
-    <svg width="360" height="640" [attr.viewBox]="viewBox" class="canvasClass">
+    <svg width="360" height="640" [attr.viewBox]="viewBox" class="image-canvas">
       <image
         [attr.href]="imagePath"
         [attr.width]="width"
@@ -21,7 +21,12 @@
     </svg>
   </div>
   <div class="blueprint-area">
-    <svg width="360" height="640" [attr.viewBox]="viewBox" class="canvasClass">
+    <svg
+      width="360"
+      height="640"
+      [attr.viewBox]="viewBox"
+      class="blueprint-canvas"
+    >
       <g *ngFor="let item of getKeys(boxes)">
         <rect
           *ngFor="let box of boxes[item]"
@@ -30,7 +35,7 @@
           [attr.width]="box.width"
           [attr.height]="box.height"
           fill="transparent"
-          stroke="black"
+          stroke="white"
           stroke-width="5"
         />
       </g>

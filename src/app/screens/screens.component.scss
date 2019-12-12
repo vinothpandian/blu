@@ -1,3 +1,5 @@
+@import "../../variables";
+
 .screens-container {
   display: grid;
   grid-template-rows: 1fr;
@@ -11,11 +13,9 @@
     place-content: center;
     place-items: center;
     height: 100%;
-  }
-}
 
-.canvasClass {
-  background-size: contain;
-  background-repeat: no-repeat;
-  border: 1px solid red;
+    [class$="-canvas"] {
+      background-color: $blueprint;
+    }
+  }
 }
