@@ -63,11 +63,6 @@ export class ScreensComponent implements OnInit {
       this.height = height;
       this.viewBox = `0 0 ${width} ${height}`;
 
-      const [svgWidth, svgHeight] = [360, 640];
-
-      const widthRatio = svgWidth / width;
-      const heightRatio = svgHeight / height;
-
       this.boxes = Object.entries(rest).reduce(
         (prev, [key, annotations]: [string, Annotation[]]) => {
           const boundsList = annotations.map(annotation => {
@@ -91,8 +86,6 @@ export class ScreensComponent implements OnInit {
         },
         {}
       );
-
-      console.log(this.boxes);
     });
   }
 

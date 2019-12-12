@@ -27,17 +27,27 @@
       [attr.viewBox]="viewBox"
       class="blueprint-canvas"
     >
-      <g *ngFor="let item of getKeys(boxes)">
-        <rect
-          *ngFor="let box of boxes[item]"
-          [attr.x]="box.x"
-          [attr.y]="box.y"
-          [attr.width]="box.width"
-          [attr.height]="box.height"
-          fill="transparent"
-          stroke="white"
-          stroke-width="5"
-        />
+      <g *ngFor="let item of getKeys(boxes)" [ngSwitch]="item">
+        <svg:g
+          *ngSwitchCase="'icon'"
+          [class]="item"
+          app-icon
+          [boxes]="boxes[item]"
+        ></svg:g>
+
+        <svg:g *ngSwitchDefault>
+          <svg:g *ngFor="let box of boxes[item]">
+            <svg:rect
+              [attr.x]="box.x"
+              [attr.y]="box.y"
+              [attr.width]="box.width"
+              [attr.height]="box.height"
+              fill="transparent"
+              stroke="white"
+              stroke-width="5"
+            />
+          </svg:g>
+        </svg:g>
       </g>
     </svg>
   </div>
