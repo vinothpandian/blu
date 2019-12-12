@@ -10,7 +10,5 @@ export class IconComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    console.log(this.boxes);
-  }
+  ngOnInit() {}
 }

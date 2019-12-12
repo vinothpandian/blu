@@ -15,7 +15,7 @@
           [attr.height]="box.height"
           fill="transparent"
           stroke="black"
-          stroke-width="5"
+          stroke-width="1"
         />
       </g>
     </svg>
@@ -29,9 +29,23 @@
     >
       <g *ngFor="let item of getKeys(boxes)" [ngSwitch]="item">
         <svg:g
-          *ngSwitchCase="'icon'"
-          [class]="item"
+          *ngSwitchCase="'image'"
+          [ngClass]="item"
           app-icon
+          [boxes]="boxes[item]"
+        ></svg:g>
+
+        <svg:g
+          *ngSwitchCase="'icon'"
+          [ngClass]="item"
+          app-icon
+          [boxes]="boxes[item]"
+        ></svg:g>
+
+        <svg:g
+          *ngSwitchCase="'text'"
+          [ngClass]="item"
+          app-text
           [boxes]="boxes[item]"
         ></svg:g>
 

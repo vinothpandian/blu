@@ -67,6 +67,7 @@ export class ScreensComponent implements OnInit {
         (prev, [key, annotations]: [string, Annotation[]]) => {
           const boundsList = annotations.map(annotation => {
             const { bounds } = annotation;
+            const { text } = annotation;
             const { start, end } = bounds;
 
             let [x, y] = start;
@@ -78,7 +79,8 @@ export class ScreensComponent implements OnInit {
               x1,
               y1,
               width: x1 - x,
-              height: y1 - y
+              height: y1 - y,
+              text: text
             };
           });
 
