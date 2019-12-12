@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
-import { Annotations } from "../@types/annotation";
+import { Annotations, Annotation } from "../@types/annotation";
+
+import isEmpty from "lodash/fp/isEmpty";
 
 type BackgroundStyle = {
   backgroundColor?: string;
@@ -13,12 +15,21 @@ type BackgroundStyle = {
   styleUrls: ["./screens.component.scss"]
 })
 export class ScreensComponent implements OnInit {
+  getKeys = Object.keys;
+
   category: string;
   appName: string;
   filename: number;
 
   imagePath: string = "";
   annotation: Annotations;
+
+  width = 100;
+  height = 100;
+
+  viewBox = "";
+
+  boxes = {};
 
   backgroundStyle: BackgroundStyle = {
     backgroundColor: "#ddd"
@@ -39,13 +50,47 @@ export class ScreensComponent implements OnInit {
 
     this.datasetService.imagePath.subscribe(imagePath => {
       this.imagePath = imagePath;
-      this.backgroundStyle = {
-        backgroundImage: `url(${imagePath})`
-      };
     });
 
-    this.datasetService.annotation.subscribe(annotation => {
+    this.datasetService.annotation.subscribe((annotation: Annotations) => {
       this.annotation = annotation;
+
+      if (isEmpty(annotation)) return;
+
+      const { image_size, ...rest } = annotation;
+      const [width, height] = image_size;
+      this.width = width;
+      this.height = height;
+      this.viewBox = `0 0 ${width} ${height}`;
+
+      const [svgWidth, svgHeight] = [360, 640];
+
+      const widthRatio = svgWidth / width;
+      const heightRatio = svgHeight / height;
+
+      this.boxes = Object.entries(rest).reduce(
+        (prev, [key, annotations]: [string, Annotation[]]) => {
+          const boundsList = annotations.map(annotation => {
+            const { bounds } = annotation;
+            const { start, end } = bounds;
+
+            let [x, y] = start;
+            let [x1, y1] = end;
+
+            return {
+              x,
+              y,
+              width: x1 - x,
+              height: y1 - y
+            };
+          });
+
+          return { ...prev, [key]: boundsList };
+        },
+        {}
+      );
+
+      console.log(this.boxes);
     });
   }
 

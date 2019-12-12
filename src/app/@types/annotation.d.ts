@@ -9,5 +9,6 @@ export interface Annotation {
 }
 
 export interface Annotations {
-  [key: string]: Annotation[];
+  image_size?: [number, number];
+  [key: string]: Annotation[] | [number, number];
 }
