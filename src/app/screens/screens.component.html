@@ -27,6 +27,11 @@
       [attr.viewBox]="viewBox"
       class="blueprint-canvas"
     >
+      <defs>
+        <filter id="f1" x="0" y="0">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="30" />
+        </filter>
+      </defs>
       <g *ngFor="let item of getKeys(boxes)" [ngSwitch]="item">
         <svg:g
           *ngSwitchCase="'image'"
@@ -63,6 +68,17 @@
           </svg:g>
         </svg:g>
       </g>
+
+      <ng-template [ngIf]="displayBg">
+        <svg:rect
+          id="board"
+          [attr.width]="width"
+          [attr.height]="height"
+          fill="#00000077"
+        ></svg:rect>
+      </ng-template>
+
+      <svg:use id="use" xlink:href="#box_14"></svg:use>
     </svg>
   </div>
   <div class="button-area"></div>

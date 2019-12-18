@@ -72,6 +72,12 @@ export class DatasetService {
       this._categories = categories.map(category => displayCase(category));
       this._categoryList.next(this._categories);
 
+      if (this._categories.includes("Demo")) {
+        this._currentCategory = "Demo";
+        this._category.next(this._currentCategory);
+        return;
+      }
+
       this._currentCategory = this._categories[0];
       this._category.next(this._currentCategory);
     });
@@ -157,7 +163,9 @@ export class DatasetService {
 
     return this.http
       .get<Annotations>(
-        `${environment.apiUrl}/get-annotation/${_category}/${_appName}/${filename}`
+        `${
+          environment.apiUrl
+        }/get-annotation/${_category}/${_appName}/${filename}`
       )
       .pipe(catchError(this.handleError<Annotations>("getAnnotations")));
   }

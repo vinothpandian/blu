@@ -3,6 +3,7 @@ import { DatasetService } from "../services/dataset.service";
 import { Annotations, Annotation } from "../@types/annotation";
 
 import isEmpty from "lodash/fp/isEmpty";
+import uniqueId from "lodash/fp/uniqueId";
 
 type BackgroundStyle = {
   backgroundColor?: string;
@@ -27,7 +28,9 @@ export class ScreensComponent implements OnInit {
   width = 100;
   height = 100;
 
-  viewBox = "";
+  displayBg = true;
+
+  viewBox = "0 0 360 640";
 
   boxes = {};
 
@@ -74,6 +77,7 @@ export class ScreensComponent implements OnInit {
             let [x1, y1] = end;
 
             return {
+              id: uniqueId("box_"),
               x,
               y,
               x1,
