@@ -34,7 +34,6 @@ def get_app_names(category):
     return jsonify(app_names)
 
 
-
 @app.route('/api/get-annotation/<category>/<app_name>/<filename>')
 def get_annotation(category, app_name, filename):
     annotation_file_path = dataset_path.joinpath(

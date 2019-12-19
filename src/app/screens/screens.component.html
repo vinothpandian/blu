@@ -26,60 +26,7 @@
       height="640"
       [attr.viewBox]="viewBox"
       class="blueprint-canvas"
-    >
-      <defs>
-        <filter id="f1" x="0" y="0">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="30" />
-        </filter>
-      </defs>
-      <g *ngFor="let item of getKeys(boxes)" [ngSwitch]="item">
-        <svg:g
-          *ngSwitchCase="'image'"
-          [ngClass]="item"
-          app-icon
-          [boxes]="boxes[item]"
-        ></svg:g>
-
-        <svg:g
-          *ngSwitchCase="'icon'"
-          [ngClass]="item"
-          app-icon
-          [boxes]="boxes[item]"
-        ></svg:g>
-
-        <svg:g
-          *ngSwitchCase="'text'"
-          [ngClass]="item"
-          app-text
-          [boxes]="boxes[item]"
-        ></svg:g>
-
-        <svg:g *ngSwitchDefault>
-          <svg:g *ngFor="let box of boxes[item]">
-            <svg:rect
-              [attr.x]="box.x"
-              [attr.y]="box.y"
-              [attr.width]="box.width"
-              [attr.height]="box.height"
-              fill="transparent"
-              stroke="white"
-              stroke-width="5"
-            />
-          </svg:g>
-        </svg:g>
-      </g>
-
-      <ng-template [ngIf]="displayBg">
-        <svg:rect
-          id="board"
-          [attr.width]="width"
-          [attr.height]="height"
-          fill="#00000077"
-        ></svg:rect>
-      </ng-template>
-
-      <svg:use id="use" xlink:href="#box_14"></svg:use>
-    </svg>
+    ></svg>
   </div>
   <div class="button-area"></div>
 </div>
