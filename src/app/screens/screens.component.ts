@@ -7,7 +7,17 @@ import {
 } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
 import { Annotations, Annotation } from "../@types/annotation";
-import { SVG, Svg, Dom, Element, Rect, Text, Line, G } from "@svgdotjs/svg.js";
+import {
+  SVG,
+  Svg,
+  Dom,
+  Element,
+  Rect,
+  Text,
+  Line,
+  G,
+  Mask
+} from "@svgdotjs/svg.js";
 
 import isEmpty from "lodash/fp/isEmpty";
 
@@ -78,22 +88,17 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
       this.svgCanvas.rect(this.width, this.height).fill("#0b94ba");
 
-      const pattern = this.svgCanvas
-        .pattern(20, 20, function(add) {
-          add.line(0, 0, 0, 20).stroke({
-            color: "#FFF",
-            width: 1
-          });
-        })
-        .rotate(45);
-
       Object.entries(rest).forEach(
         ([element, annotations]: [string, Annotation[]]) => {
-          if (element.toLowerCase() !== "icon") {
-            return;
-          }
+          switch (element.toLowerCase()) {
+            case "icon":
+              this.drawIcons(annotations);
+              break;
 
-          this.drawIcons(annotations);
+            default:
+              this.drawAny(annotations);
+              break;
+          }
         }
       );
     });
@@ -130,8 +135,6 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         color: "red",
         width: 2
       });
-
-    // const textPositionX = x + width
 
     const text = new Text()
       .text("Icon")
@@ -192,7 +195,41 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     return [addHighlight, removeHighlight];
   }
 
-  drawIcons(annotations: Annotation[]) {
+  drawAny(annotations: Annotation[]) {
+    const iconGroup = this.svgCanvas.group().addClass("any");
+
+    annotations.forEach((annotation: Annotation, index: number) => {
+      const { bounds, class_name, resource_id, text } = annotation;
+
+      const { start, end } = bounds;
+      const [x1, y1] = start;
+      const [x2, y2] = end;
+
+      const width = x2 - x1;
+      const height = y2 - y1;
+
+      const group = iconGroup.group().addClass(`any_${index}`);
+
+      group
+        .rect(width, height)
+        .move(...start)
+        .fill("transparent")
+        .stroke({ color: "white", width: 2 });
+
+      const [addHighlight, removeHighlight] = this.getHighlightListeners(
+        x1,
+        y1,
+        width,
+        height,
+        group
+      );
+
+      group.on("mousemove", addHighlight);
+      group.on("mouseleave", removeHighlight);
+    });
+  }
+
+  drawImages(annotations: Annotation[]) {
     const iconGroup = this.svgCanvas.group().addClass("icons");
 
     annotations.forEach((annotation: Annotation, index: number) => {
@@ -216,6 +253,48 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       group
         .line(x1 + width, y1, x2 - width, y2)
         .stroke({ color: "#FFF", width: 2 });
+
+      const [addHighlight, removeHighlight] = this.getHighlightListeners(
+        x1,
+        y1,
+        width,
+        height,
+        group
+      );
+
+      group.on("mousemove", addHighlight);
+      group.on("mouseleave", removeHighlight);
+    });
+  }
+
+  drawIcons(annotations: Annotation[]) {
+    const iconGroup = this.svgCanvas.group().addClass("icons");
+
+    // const maskRectVert = new Rect
+
+    annotations.forEach((annotation: Annotation, index: number) => {
+      const { bounds, class_name, resource_id, text } = annotation;
+
+      const { start, end } = bounds;
+      const [x1, y1] = start;
+      const [x2, y2] = end;
+
+      const width = x2 - x1;
+      const height = y2 - y1;
+
+      const group = iconGroup.group().addClass(`icon_${index}`);
+
+      group
+        .rect(width, height)
+        .move(...start)
+        .fill("transparent")
+        .stroke({ color: "white", width: 2 });
+
+      const mask = new Mask()
+        .rect(width / 2, height / 2)
+        .move(x1 + width / 4, y1);
+
+      group.maskWith(mask);
 
       const [addHighlight, removeHighlight] = this.getHighlightListeners(
         x1,
