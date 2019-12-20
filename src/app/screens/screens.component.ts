@@ -88,104 +88,134 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
       this.svgCanvas.rect(this.width, this.height).fill("#0b94ba");
 
-      // this.parseAnnotations(rest?.children);
+      const group = new G().addClass("root").addTo(this.svgCanvas);
+
+      this.parseAnnotations(rest?.children, group);
     });
   }
 
-  parseAnnotations(annotations: Annotations[]) {
-    console.log(annotations);
+  parseAnnotations(annotations: Annotations[], parent: G) {
+    annotations.forEach((annotations: Annotations, index: number) => {
+      const label = annotations?.componentLabel ?? "group";
+
+      const group = new G().addClass(`${label}_${index}`);
+
+      const { bounds } = annotations;
+      const [x1, y1, x2, y2] = bounds;
+
+      const width = x2 - x1;
+      const height = y2 - y1;
+
+      const rect = new Rect()
+        .size(width, height)
+        .move(x1, y1)
+        .fill("transparent")
+        .stroke({
+          color: "white",
+          width: 4
+        });
+
+      group.add(rect);
+      parent.add(group);
+
+      if (Object.keys(annotations).includes("children")) {
+        this.parseAnnotations(annotations.children, group);
+      }
+
+      return;
+    });
   }
 
   ngOnInit() {}
 
   ngAfterViewInit() {}
 
-  // createLines({ x1, y1, x2, y2 }) {
-  //   return new Line({
-  //     x1,
-  //     y1,
-  //     x2,
-  //     y2
-  //   }).stroke({
-  //     color: "white",
-  //     width: 4
-  //   });
-  // }
+  createLines({ x1, y1, x2, y2 }) {
+    return new Line({
+      x1,
+      y1,
+      x2,
+      y2
+    }).stroke({
+      color: "white",
+      width: 4
+    });
+  }
 
-  // getHighlightListeners(
-  //   x: number,
-  //   y: number,
-  //   width: number,
-  //   height: number,
-  //   element: any
-  // ) {
-  //   const rect = new Rect()
-  //     .size(width, height)
-  //     .move(x, y)
-  //     .fill("red")
-  //     .stroke({
-  //       color: "red",
-  //       width: 2
-  //     });
+  getHighlightListeners(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    element: any
+  ) {
+    const rect = new Rect()
+      .size(width, height)
+      .move(x, y)
+      .fill("red")
+      .stroke({
+        color: "red",
+        width: 2
+      });
 
-  //   const text = new Text()
-  //     .text("Icon")
-  //     .font({
-  //       family: "Helvetica",
-  //       size: "3rem",
-  //       anchor: "end"
-  //     })
-  //     .move(x, y + height)
-  //     .fill("white");
+    const text = new Text()
+      .text("Icon")
+      .font({
+        family: "Helvetica",
+        size: "3rem",
+        anchor: "end"
+      })
+      .move(x, y + height)
+      .fill("white");
 
-  //   const leftLine = this.createLines({
-  //     x1: 0,
-  //     y1: y + height / 2,
-  //     x2: x,
-  //     y2: y + height / 2
-  //   });
+    const leftLine = this.createLines({
+      x1: 0,
+      y1: y + height / 2,
+      x2: x,
+      y2: y + height / 2
+    });
 
-  //   const rightLine = this.createLines({
-  //     x1: x + width,
-  //     y1: y + height / 2,
-  //     x2: this.width,
-  //     y2: y + height / 2
-  //   });
+    const rightLine = this.createLines({
+      x1: x + width,
+      y1: y + height / 2,
+      x2: this.width,
+      y2: y + height / 2
+    });
 
-  //   const topLine = this.createLines({
-  //     x1: x + width / 2,
-  //     y1: 0,
-  //     x2: x + width / 2,
-  //     y2: y
-  //   });
+    const topLine = this.createLines({
+      x1: x + width / 2,
+      y1: 0,
+      x2: x + width / 2,
+      y2: y
+    });
 
-  //   const bottomLine = this.createLines({
-  //     x1: x + width / 2,
-  //     y1: y + height,
-  //     x2: x + width / 2,
-  //     y2: this.height
-  //   });
+    const bottomLine = this.createLines({
+      x1: x + width / 2,
+      y1: y + height,
+      x2: x + width / 2,
+      y2: this.height
+    });
 
-  //   const group = new G()
-  //     .add(rect)
-  //     .add(text)
-  //     .add(leftLine)
-  //     .add(rightLine)
-  //     .add(topLine)
-  //     .add(bottomLine);
+    const group = new G()
+      .add(rect)
+      .add(text)
+      .add(leftLine)
+      .add(rightLine)
+      .add(topLine)
+      .add(bottomLine);
 
-  //   const addHighlight = () => {
-  //     this.svgCanvas.add(group);
+    const addHighlight = () => {
+      this.svgCanvas.add(group);
 
-  //     group.insertBefore(element);
-  //   };
+      group.insertBefore(element);
+    };
 
-  //   const removeHighlight = () => {
-  //     group.remove();
-  //   };
+    const removeHighlight = () => {
+      group.remove();
+    };
 
-  //   return [addHighlight, removeHighlight];
-  // }
+    return [addHighlight, removeHighlight];
+  }
 
   // drawAny(annotations: any) {
   //   const iconGroup = this.svgCanvas.group().addClass("any");

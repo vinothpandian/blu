@@ -4,4 +4,5 @@ export interface Annotations {
   children?: Annotations[];
   class: string;
   clickables: boolean;
+  componentLabel?: string;
 }
