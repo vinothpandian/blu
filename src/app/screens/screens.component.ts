@@ -82,7 +82,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         x2: width,
         y2: height,
         width: width,
-        height: height
+        height: height,
+        component: "root"
       });
 
       this.parseAnnotations(rest?.children, group);
@@ -109,7 +110,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         x2: x2,
         y2: y2,
         width: width,
-        height: height
+        height: height,
+        component: label
       });
 
       const rect = new Rect()
@@ -175,6 +177,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       y2: parentY2
     } = parent.data("bounds");
 
+    const { component } = element.data("bounds");
+
     const rect = new Rect()
       .size(width, height)
       .move(x, y)
@@ -185,7 +189,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       });
 
     const text = new Text()
-      .text("Icon")
+      .text(component)
       .font({
         family: "Helvetica",
         size: "3rem",
