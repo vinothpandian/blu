@@ -118,6 +118,17 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       group.add(rect);
       parent.add(group);
 
+      const [addHighlight, removeHighlight] = this.getHighlightListeners(
+        x1,
+        y1,
+        width,
+        height,
+        rect
+      );
+
+      rect.on("mouseover", addHighlight);
+      rect.on("mouseout", removeHighlight);
+
       if (Object.keys(annotations).includes("children")) {
         this.parseAnnotations(annotations.children, group);
       }
