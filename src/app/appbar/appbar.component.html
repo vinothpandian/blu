@@ -28,9 +28,9 @@
           aria-label="App Name"
           matInput
           [formControl]="appNameControl"
-          [matAutocomplete]="autoAppName"
+          [matAutocomplete]="auto"
         />
-        <mat-autocomplete #autoAppName="matAutocomplete">
+        <mat-autocomplete #auto="matAutocomplete">
           <mat-option *ngFor="let option of appNameList" [value]="option">
             {{ option }}
           </mat-option>
