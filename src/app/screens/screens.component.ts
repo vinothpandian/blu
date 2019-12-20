@@ -1,25 +1,11 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ElementRef,
-  AfterViewInit
-} from "@angular/core";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
 import { Annotations } from "../@types/annotation";
-import {
-  SVG,
-  Svg,
-  Dom,
-  Element,
-  Rect,
-  Text,
-  Line,
-  G,
-  Mask
-} from "@svgdotjs/svg.js";
+import { SVG, Svg, Rect, Text, Line, G } from "@svgdotjs/svg.js";
 
 import isEmpty from "lodash/fp/isEmpty";
+
+import * as shortid from "shortid";
 
 type BackgroundStyle = {
   backgroundColor?: string;
@@ -90,6 +76,15 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
       const group = new G().addClass("root").addTo(this.svgCanvas);
 
+      group.data("bounds", {
+        x1: 0,
+        y1: 0,
+        x2: width,
+        y2: height,
+        width: width,
+        height: height
+      });
+
       this.parseAnnotations(rest?.children, group);
     });
   }
@@ -98,13 +93,24 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     annotations.forEach((annotations: Annotations, index: number) => {
       const label = annotations?.componentLabel ?? "group";
 
-      const group = new G().addClass(`${label}_${index}`);
+      const className = `${label}_${index}_${shortid.generate()}`;
+
+      const group = new G().addClass(className);
 
       const { bounds } = annotations;
       const [x1, y1, x2, y2] = bounds;
 
       const width = x2 - x1;
       const height = y2 - y1;
+
+      group.data("bounds", {
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        width: width,
+        height: height
+      });
 
       const rect = new Rect()
         .size(width, height)
@@ -123,7 +129,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         y1,
         width,
         height,
-        rect
+        group,
+        parent
       );
 
       rect.on("mouseover", addHighlight);
@@ -158,8 +165,16 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     y: number,
     width: number,
     height: number,
-    element: any
+    element: any,
+    parent: any
   ) {
+    const {
+      x1: parentX1,
+      y1: parentY1,
+      x2: parentX2,
+      y2: parentY2
+    } = parent.data("bounds");
+
     const rect = new Rect()
       .size(width, height)
       .move(x, y)
@@ -180,7 +195,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       .fill("white");
 
     const leftLine = this.createLines({
-      x1: 0,
+      x1: parentX1,
       y1: y + height / 2,
       x2: x,
       y2: y + height / 2
@@ -189,13 +204,13 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     const rightLine = this.createLines({
       x1: x + width,
       y1: y + height / 2,
-      x2: this.width,
+      x2: parentX2,
       y2: y + height / 2
     });
 
     const topLine = this.createLines({
       x1: x + width / 2,
-      y1: 0,
+      y1: parentY1,
       x2: x + width / 2,
       y2: y
     });
@@ -204,7 +219,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       x1: x + width / 2,
       y1: y + height,
       x2: x + width / 2,
-      y2: this.height
+      y2: parentY2
     });
 
     const group = new G()
@@ -217,7 +232,6 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
     const addHighlight = () => {
       this.svgCanvas.add(group);
-
       group.insertBefore(element);
     };
 
