@@ -88,7 +88,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
       this.svgCanvas.rect(this.width, this.height).fill("#0b94ba");
 
-      this.parseAnnotations(rest?.children);
+      // this.parseAnnotations(rest?.children);
     });
   }
 
