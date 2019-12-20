@@ -2,10 +2,17 @@ import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
 import { Annotations } from "../@types/annotation";
 import { SVG, Svg, Rect, Text, Line, G } from "@svgdotjs/svg.js";
+import { MatTreeNestedDataSource } from "@angular/material/tree";
+import { NestedTreeControl } from "@angular/cdk/tree";
 
 import isEmpty from "lodash/fp/isEmpty";
 
 import * as shortid from "shortid";
+
+interface AnnotationNode {
+  name: string;
+  children?: AnnotationNode[];
+}
 
 type BackgroundStyle = {
   backgroundColor?: string;
@@ -36,6 +43,9 @@ export class ScreensComponent implements OnInit, AfterViewInit {
   viewBox = "0 0 360 640";
 
   boxes = {};
+  TREE_DATA: AnnotationNode[] = [];
+  treeControl = new NestedTreeControl<AnnotationNode>(node => node.children);
+  dataSource = new MatTreeNestedDataSource<AnnotationNode>();
 
   backgroundStyle: BackgroundStyle = {
     backgroundColor: "#ddd"
@@ -87,7 +97,50 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       });
 
       this.parseAnnotations(rest?.children, group);
+
+      const children = this.buildAnnotationTree(annotations?.children, []);
+
+      this.TREE_DATA = [
+        {
+          name: "root",
+          children
+        }
+      ];
+
+      this.dataSource.data = this.TREE_DATA;
     });
+  }
+
+  hasChild = (_: number, node: AnnotationNode) =>
+    !!node.children && node.children.length > 0;
+
+  buildAnnotationTree(annotations: Annotations[], []): AnnotationNode[] {
+    const children = annotations.reduce(
+      (previousValue: AnnotationNode[], currentValue: Annotations) => {
+        const name = currentValue?.componentLabel ?? "root";
+
+        let children = [];
+
+        if (Object.keys(currentValue).includes("children")) {
+          children = this.buildAnnotationTree(currentValue.children, []);
+        }
+
+        if (isEmpty(children)) {
+          return [...previousValue, { name }];
+        }
+
+        return [
+          ...previousValue,
+          {
+            name,
+            children
+          }
+        ];
+      },
+      []
+    );
+
+    return children;
   }
 
   parseAnnotations(annotations: Annotations[], parent: G) {

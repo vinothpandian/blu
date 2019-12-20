@@ -1,7 +1,7 @@
 .screens-container {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 45% 45% 10%;
+  grid-template-columns: 40% 40% 20%;
   grid-template-areas: ". . .";
   height: 100%;
 
@@ -12,4 +12,23 @@
     place-items: center;
     height: 100%;
   }
+
+  .tree-area {
+    display: flex;
+    place-content: flex-start;
+    place-items: flex-start;
+    height: auto;
+    overflow-y: scroll;
+  }
+}
+
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
 }

@@ -22,16 +22,17 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatTreeModule } from "@angular/material/tree";
 
 import { AppbarComponent } from "./appbar/appbar.component";
 import { DisplayCasePipe } from "./pipes/display-case.pipe";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UiListAreaComponent } from "./ui-list-area/ui-list-area.component";
-import { ScreensComponent } from './screens/screens.component';
-import { ButtonComponent } from './elements/button/button.component';
-import { IconComponent } from './elements/icon/icon.component';
-import { TextComponent } from './elements/text/text.component';
-import { AdvertisementComponent } from './elements/advertisement/advertisement.component';
+import { ScreensComponent } from "./screens/screens.component";
+import { ButtonComponent } from "./elements/button/button.component";
+import { IconComponent } from "./elements/icon/icon.component";
+import { TextComponent } from "./elements/text/text.component";
+import { AdvertisementComponent } from "./elements/advertisement/advertisement.component";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { AdvertisementComponent } from './elements/advertisement/advertisement.c
     MatSelectModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatTreeModule,
     MatProgressSpinnerModule,
     MatSliderModule,
     MatListModule,
