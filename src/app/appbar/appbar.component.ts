@@ -20,8 +20,8 @@ export class AppbarComponent implements OnInit {
     this.datasetService.categoryList.subscribe(categories => {
       this.categories = categories.sort();
 
-      if (this.categories.includes("Demo")) {
-        this.categoryControl.setValue("Demo");
+      if (this.categories.includes("Social")) {
+        this.categoryControl.setValue("Social");
         return;
       }
 

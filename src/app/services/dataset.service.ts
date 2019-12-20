@@ -61,9 +61,11 @@ export class DatasetService {
     return this._imagePath.asObservable();
   }
 
-  private _currentAnnotation: Annotations = {};
-  private _annotation: BehaviorSubject<Annotations> = new BehaviorSubject({});
-  get annotation(): Observable<Annotations> {
+  private _currentAnnotation: Annotations | {} = {};
+  private _annotation: BehaviorSubject<Annotations | {}> = new BehaviorSubject(
+    {}
+  );
+  get annotation(): Observable<Annotations | {}> {
     return this._annotation.asObservable();
   }
 
@@ -72,8 +74,8 @@ export class DatasetService {
       this._categories = categories.map(category => displayCase(category));
       this._categoryList.next(this._categories);
 
-      if (this._categories.includes("Demo")) {
-        this._currentCategory = "Demo";
+      if (this._categories.includes("Social")) {
+        this._currentCategory = "Social";
         this._category.next(this._currentCategory);
         return;
       }
@@ -163,9 +165,7 @@ export class DatasetService {
 
     return this.http
       .get<Annotations>(
-        `${
-          environment.apiUrl
-        }/get-annotation/${_category}/${_appName}/${filename}`
+        `${environment.apiUrl}/get-annotation/${_category}/${_appName}/${filename}`
       )
       .pipe(catchError(this.handleError<Annotations>("getAnnotations")));
   }

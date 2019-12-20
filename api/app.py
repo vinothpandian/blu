@@ -12,7 +12,8 @@ app = Flask(__name__)
 CORS(app)
 
 blu_path = Path("./blu")
-dataset_path = blu_path.joinpath("annotated")
+dataset_path = blu_path.joinpath("dataset")
+annotation_path = blu_path.joinpath("annotated")
 
 dataset_details = pd.read_csv(blu_path.joinpath("dataset.csv"))
 
@@ -37,7 +38,7 @@ def get_app_names(category):
 @app.route('/api/get-annotation/<category>/<app_name>/<filename>')
 def get_annotation(category, app_name, filename):
     annotation_file_path = dataset_path.joinpath(
-        category, app_name, f"annotation_{filename}.json").as_posix()
+        category, app_name, f"{filename}.json").as_posix()
 
     with open(annotation_file_path, "r") as f:
         data = json.load(f)
