@@ -16,12 +16,15 @@ import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { NestedTreeControl } from "@angular/cdk/tree";
 
 import isEmpty from "lodash/fp/isEmpty";
+import find from "lodash/fp/find";
+import flattenDeep from "lodash/fp/flattenDeep";
 
 import * as shortid from "shortid";
 import { getElementOutline, backgroundColor } from "../utils/elements";
 
 interface AnnotationNode {
   name: string;
+  className: string;
   children?: AnnotationNode[];
 }
 
@@ -106,7 +109,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         width: width,
         height: height,
         component: "root",
-        text: ""
+        text: "",
+        className: this.annotations.className
       });
 
       this.parseAnnotations(rest?.children, group);
@@ -116,6 +120,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       this.TREE_DATA = [
         {
           name: "root",
+          className: this.annotations.className,
           children
         }
       ];
@@ -133,6 +138,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     const children = annotations.reduce(
       (previousValue: AnnotationNode[], currentValue: Annotations) => {
         const name = currentValue?.componentLabel ?? "root";
+        const { className } = currentValue;
 
         let children = [];
 
@@ -141,13 +147,14 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         }
 
         if (isEmpty(children)) {
-          return [...previousValue, { name }];
+          return [...previousValue, { name, className }];
         }
 
         return [
           ...previousValue,
           {
             name,
+            className,
             children
           }
         ];
@@ -159,10 +166,10 @@ export class ScreensComponent implements OnInit, AfterViewInit {
   }
 
   parseAnnotations(annotations: Annotations[], parent: G) {
-    annotations.forEach((annotations: Annotations, index: number) => {
+    annotations.forEach((annotations: Annotations) => {
       const label = annotations?.componentLabel ?? "group";
 
-      const className = `${label}_${index}_${shortid.generate()}`;
+      const className = annotations.className;
 
       const group = new G().addClass(className);
 
@@ -182,7 +189,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         width: width,
         height: height,
         component: label,
-        text
+        text,
+        className
       };
 
       group.data("bounds", elementDetails);
@@ -243,7 +251,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       y2: parentY2
     } = parent.data("bounds");
 
-    const { component } = element.data("bounds");
+    const { component, className } = element.data("bounds");
 
     const rect = new Rect()
       .size(width, height)
@@ -301,14 +309,50 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       .add(bottomLine);
 
     const addHighlight = () => {
+      this.updateTreeNodeClassName(className, this.TREE_DATA);
       this.svgCanvas.add(group);
       group.insertBefore(element);
     };
 
     const removeHighlight = () => {
+      this.updateTreeNodeClassName(
+        `${className} found_this_node`,
+        this.TREE_DATA,
+        false
+      );
       group.remove();
     };
 
     return [addHighlight, removeHighlight];
+  }
+
+  updateTreeNodeClassName(
+    className: string,
+    tree: AnnotationNode[],
+    addClass: boolean = true
+  ) {
+    tree.forEach((annotationNode: AnnotationNode) => {
+      if (className === annotationNode.className) {
+        if (addClass) {
+          annotationNode.className += ` found_this_node`;
+          return;
+        }
+
+        annotationNode.className = annotationNode.className.replace(
+          " found_this_node",
+          ""
+        );
+
+        return;
+      }
+
+      if (Object.keys(annotationNode).includes("children")) {
+        return this.updateTreeNodeClassName(
+          className,
+          annotationNode.children,
+          addClass
+        );
+      }
+    });
   }
 }

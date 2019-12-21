@@ -32,6 +32,12 @@
       }
     }
   }
+
+  .blueprint-area {
+    .blueprint-canvas {
+      cursor: pointer;
+    }
+  }
 }
 
 .example-tree-invisible {

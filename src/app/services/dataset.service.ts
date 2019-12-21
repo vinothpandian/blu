@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of, BehaviorSubject } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 
 import { environment } from "../../environments/environment";
 import { Categories } from "../@types/categories";
@@ -9,6 +9,8 @@ import { AppNames } from "../@types/app-names";
 import { Annotations } from "../@types/annotation";
 import { displayCase, dirCase } from "../utils/text-case";
 import { getPath } from "../utils/paths";
+
+import * as shortid from "shortid";
 
 @Injectable({
   providedIn: "root"
@@ -131,6 +133,33 @@ export class DatasetService {
     this.setFilename(this._currentFilenames[0]);
   }
 
+  addClassNameToAnnotations(annotations: Annotations[], []): Annotations[] {
+    const children = annotations.reduce(
+      (previousValue: Annotations[], currentValue: Annotations) => {
+        const name = currentValue?.componentLabel ?? "root";
+        const className = `${name}_${shortid.generate()}`;
+
+        let children = [];
+
+        if (Object.keys(currentValue).includes("children")) {
+          children = this.addClassNameToAnnotations(currentValue.children, []);
+        }
+
+        return [
+          ...previousValue,
+          {
+            ...currentValue,
+            className,
+            children
+          }
+        ];
+      },
+      []
+    );
+
+    return children;
+  }
+
   setFilename(filename: number) {
     this._currentFilename = filename;
     this._filename.next(this._currentFilename);
@@ -167,7 +196,22 @@ export class DatasetService {
       .get<Annotations>(
         `${environment.apiUrl}/get-annotation/${_category}/${_appName}/${filename}`
       )
-      .pipe(catchError(this.handleError<Annotations>("getAnnotations")));
+      .pipe(
+        map((annotations: Annotations) => {
+          const childrenWithAnnotations = this.addClassNameToAnnotations(
+            annotations?.children,
+            []
+          );
+
+          annotations.className = "root-screen";
+          annotations.children = childrenWithAnnotations;
+
+          console.log(annotations);
+          return annotations;
+        }),
+
+        catchError(this.handleError<Annotations>("getAnnotations"))
+      );
   }
 
   /**

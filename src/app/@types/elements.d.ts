@@ -7,4 +7,5 @@ interface ElementDetails {
   height: number;
   component: string;
   text: string;
+  className: string;
 }
