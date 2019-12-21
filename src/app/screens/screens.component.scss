@@ -1,7 +1,7 @@
 .screens-container {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: 40% 40% 20%;
+  grid-template-columns: 35% 35% 30%;
   grid-template-areas: ". . .";
   height: 100%;
 
@@ -14,11 +14,23 @@
   }
 
   .tree-area {
-    display: flex;
-    place-content: flex-start;
-    place-items: flex-start;
-    height: auto;
+    padding-left: 2rem;
+    border-left: 1px solid rgba(0, 0, 0, 0.15);
+    justify-content: flex-start;
     overflow-y: scroll;
+
+    .tree {
+      width: 360px;
+      height: 640px;
+
+      &-header {
+        display: flex;
+
+        .spacer {
+          flex: 1;
+        }
+      }
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
 import { Annotations } from "../@types/annotation";
 import {
@@ -36,6 +36,7 @@ type BackgroundStyle = {
   styleUrls: ["./screens.component.scss"]
 })
 export class ScreensComponent implements OnInit, AfterViewInit {
+  @ViewChild("tree", { static: false }) tree: any;
   getKeys = Object.keys;
 
   category: string;
@@ -120,6 +121,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       ];
 
       this.dataSource.data = this.TREE_DATA;
+      this.treeControl.dataNodes = this.TREE_DATA;
+      this.tree.treeControl.expandAll();
     });
   }
 
@@ -245,10 +248,10 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     const rect = new Rect()
       .size(width, height)
       .move(x, y)
-      .fill("red")
+      .fill("transparent")
       .stroke({
-        color: "red",
-        width: 2
+        color: "gold",
+        width: 10
       });
 
     const text = new Text()

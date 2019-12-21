@@ -15,7 +15,14 @@ export const getElementOutline = (
       return drawIcons(elementDetails);
     case "text":
       return drawTexts(elementDetails);
+    case "input":
+      return drawButtons(elementDetails);
+    case "text button":
+      return drawButtons(elementDetails);
+    case "web view":
+      return drawWebViews(elementDetails);
     default:
+      console.log(elementDetails?.component);
       return drawAny(elementDetails);
   }
 };
@@ -111,7 +118,7 @@ const drawIcons = (elementDetails: ElementDetails) => {
 
   group
     .circle()
-    .radius(width / 6)
+    .radius(height / 6)
     .fill("white")
     .center(x1 + width / 2, y1 + height / 2);
 
@@ -166,6 +173,71 @@ const drawAds = (elementDetails: ElementDetails) => {
 
   group
     .text(`Advertisement Banner ${width}px x ${height}px`)
+    .font({
+      anchor: "middle",
+      size: "2.5rem",
+      family: "Roboto, Helvetica Neue, sans-serif",
+      fill: "white"
+    })
+    .center(0.5 * width, 0.5 * height);
+
+  group.move(x1, y1);
+
+  return group;
+};
+
+const drawButtons = (elementDetails: ElementDetails) => {
+  const { width, height, x1, y1, text } = elementDetails;
+  const group = new G();
+
+  group
+    .rect(width, height)
+    .fill("transparent")
+    .radius(20)
+    .stroke({
+      color: "white",
+      width: 4
+    });
+
+  group
+    .text(text)
+    .font({
+      anchor: "middle",
+      size: "2.5rem",
+      family: "Roboto, Helvetica Neue, sans-serif",
+      fill: "white"
+    })
+    .center(0.5 * width, 0.5 * height);
+
+  group.move(x1, y1);
+
+  return group;
+};
+
+const drawWebViews = (elementDetails: ElementDetails) => {
+  const { width, height, x1, y1, text } = elementDetails;
+  const group = new G();
+
+  group
+    .rect(width, height)
+    .fill("transparent")
+    .radius(20)
+    .stroke({
+      color: "white",
+      width: 4
+    });
+
+  group
+    .circle(0.75 * width)
+    .fill("transparent")
+    .stroke({
+      color: "white",
+      width: 4
+    })
+    .center(0.5 * width, 0.5 * height);
+
+  group
+    .text("Web view")
     .font({
       anchor: "middle",
       size: "2.5rem",
