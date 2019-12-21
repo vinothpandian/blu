@@ -1,13 +1,24 @@
 import { Component, OnInit, AfterViewInit } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
 import { Annotations } from "../@types/annotation";
-import { SVG, Svg, Rect, Text, Line, G } from "@svgdotjs/svg.js";
+import {
+  SVG,
+  Svg,
+  Rect,
+  Text,
+  Line,
+  G,
+  Ellipse,
+  Mask,
+  ClipPath
+} from "@svgdotjs/svg.js";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { NestedTreeControl } from "@angular/cdk/tree";
 
 import isEmpty from "lodash/fp/isEmpty";
 
 import * as shortid from "shortid";
+import { getElementOutline, backgroundColor } from "../utils/elements";
 
 interface AnnotationNode {
   name: string;
@@ -82,7 +93,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       this.svgCanvas = SVG(".blueprint-canvas");
       this.svgCanvas.clear();
 
-      this.svgCanvas.rect(this.width, this.height).fill("#0b94ba");
+      this.svgCanvas.rect(this.width, this.height).fill(backgroundColor);
 
       const group = new G().addClass("root").addTo(this.svgCanvas);
 
@@ -93,7 +104,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         y2: height,
         width: width,
         height: height,
-        component: "root"
+        component: "root",
+        text: ""
       });
 
       this.parseAnnotations(rest?.children, group);
@@ -157,26 +169,24 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       const width = x2 - x1;
       const height = y2 - y1;
 
-      group.data("bounds", {
+      const text = annotations?.text ?? "";
+
+      const elementDetails: ElementDetails = {
         x1: x1,
         y1: y1,
         x2: x2,
         y2: y2,
         width: width,
         height: height,
-        component: label
-      });
+        component: label,
+        text
+      };
 
-      const rect = new Rect()
-        .size(width, height)
-        .move(x1, y1)
-        .fill("transparent")
-        .stroke({
-          color: "white",
-          width: 4
-        });
+      group.data("bounds", elementDetails);
 
-      group.add(rect);
+      const element = getElementOutline(label, elementDetails);
+
+      group.add(element);
       parent.add(group);
 
       const [addHighlight, removeHighlight] = this.getHighlightListeners(
@@ -188,8 +198,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         parent
       );
 
-      rect.on("mouseover", addHighlight);
-      rect.on("mouseout", removeHighlight);
+      element.on("mouseover", addHighlight);
+      element.on("mouseout", removeHighlight);
 
       if (Object.keys(annotations).includes("children")) {
         this.parseAnnotations(annotations.children, group);
@@ -298,118 +308,4 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
     return [addHighlight, removeHighlight];
   }
-
-  // drawAny(annotations: any) {
-  //   const iconGroup = this.svgCanvas.group().addClass("any");
-
-  //   annotations.forEach((annotation: any, index: number) => {
-  //     const { bounds, class_name, resource_id, text } = annotation;
-
-  //     const { start, end } = bounds;
-  //     const [x1, y1] = start;
-  //     const [x2, y2] = end;
-
-  //     const width = x2 - x1;
-  //     const height = y2 - y1;
-
-  //     const group = iconGroup.group().addClass(`any_${index}`);
-
-  //     group
-  //       .rect(width, height)
-  //       .move(...start)
-  //       .fill("transparent")
-  //       .stroke({ color: "white", width: 2 });
-
-  //     const [addHighlight, removeHighlight] = this.getHighlightListeners(
-  //       x1,
-  //       y1,
-  //       width,
-  //       height,
-  //       group
-  //     );
-
-  //     group.on("mousemove", addHighlight);
-  //     group.on("mouseleave", removeHighlight);
-  //   });
-  // }
-
-  // drawImages(annotations: Annotation[]) {
-  //   const iconGroup = this.svgCanvas.group().addClass("icons");
-
-  //   annotations.forEach((annotation: Annotation, index: number) => {
-  //     const { bounds, class_name, resource_id, text } = annotation;
-
-  //     const { start, end } = bounds;
-  //     const [x1, y1] = start;
-  //     const [x2, y2] = end;
-
-  //     const width = x2 - x1;
-  //     const height = y2 - y1;
-
-  //     const group = iconGroup.group().addClass(`icon_${index}`);
-
-  //     group
-  //       .rect(width, height)
-  //       .move(...start)
-  //       .fill("transparent")
-  //       .stroke({ color: "white", width: 2 });
-  //     group.line(x1, y1, x2, y2).stroke({ color: "#FFF", width: 2 });
-  //     group
-  //       .line(x1 + width, y1, x2 - width, y2)
-  //       .stroke({ color: "#FFF", width: 2 });
-
-  //     const [addHighlight, removeHighlight] = this.getHighlightListeners(
-  //       x1,
-  //       y1,
-  //       width,
-  //       height,
-  //       group
-  //     );
-
-  //     group.on("mousemove", addHighlight);
-  //     group.on("mouseleave", removeHighlight);
-  //   });
-  // }
-
-  // drawIcons(annotations: Annotation[]) {
-  //   const iconGroup = this.svgCanvas.group().addClass("icons");
-
-  //   // const maskRectVert = new Rect
-
-  //   annotations.forEach((annotation: Annotation, index: number) => {
-  //     const { bounds, class_name, resource_id, text } = annotation;
-
-  //     const { start, end } = bounds;
-  //     const [x1, y1] = start;
-  //     const [x2, y2] = end;
-
-  //     const width = x2 - x1;
-  //     const height = y2 - y1;
-
-  //     const group = iconGroup.group().addClass(`icon_${index}`);
-
-  //     group
-  //       .rect(width, height)
-  //       .move(...start)
-  //       .fill("transparent")
-  //       .stroke({ color: "white", width: 2 });
-
-  //     const mask = new Mask()
-  //       .rect(width / 2, height / 2)
-  //       .move(x1 + width / 4, y1);
-
-  //     group.maskWith(mask);
-
-  //     const [addHighlight, removeHighlight] = this.getHighlightListeners(
-  //       x1,
-  //       y1,
-  //       width,
-  //       height,
-  //       group
-  //     );
-
-  //     group.on("mousemove", addHighlight);
-  //     group.on("mouseleave", removeHighlight);
-  //   });
-  // }
 }

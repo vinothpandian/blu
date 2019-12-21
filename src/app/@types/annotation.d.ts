@@ -5,4 +5,5 @@ export interface Annotations {
   class: string;
   clickables: boolean;
   componentLabel?: string;
+  text?: string;
 }
