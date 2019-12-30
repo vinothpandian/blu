@@ -1,25 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from "@angular/core";
 import { DatasetService } from "../services/dataset.service";
 import { Annotations } from "../@types/annotation";
-import {
-  SVG,
-  Svg,
-  Rect,
-  Text,
-  Line,
-  G,
-  Ellipse,
-  Mask,
-  ClipPath
-} from "@svgdotjs/svg.js";
+import { SVG, Svg, Rect, Text, G } from "@svgdotjs/svg.js";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { NestedTreeControl } from "@angular/cdk/tree";
 
 import isEmpty from "lodash/fp/isEmpty";
-import find from "lodash/fp/find";
-import flattenDeep from "lodash/fp/flattenDeep";
-
-import * as shortid from "shortid";
 import { getElementOutline, backgroundColor } from "../utils/elements";
 
 interface AnnotationNode {
@@ -98,6 +84,8 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       this.svgCanvas.clear();
 
       this.svgCanvas.rect(this.width, this.height).fill(backgroundColor);
+
+      
 
       const group = new G().addClass("root").addTo(this.svgCanvas);
 
@@ -224,16 +212,37 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {}
 
-  createLines({ x1, y1, x2, y2 }) {
-    return new Line({
-      x1,
-      y1,
-      x2,
-      y2
-    }).stroke({
+  createLines({ x1, y1, x2, y2 }, isVertical = false) {
+    const group = new G();
+
+    group.line([x1, y1, x2, y2]).stroke({
       color: "white",
       width: 4
     });
+
+    let textX = x1 + 30;
+    let textY = y1 + 30;
+
+    if (isVertical) {
+      textY = (y1 + y2) / 2;
+    } else {
+      textX = (x1 + x2) / 2;
+    }
+
+    const text = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+    group
+      .text(`${text}px`)
+      .move(textX, textY)
+      .fill("gold")
+      .font({
+        family: "Helvetica",
+        size: "3rem",
+        anchor: isVertical ? "start" : "end",
+        weight: 500
+      });
+
+    return group;
   }
 
   getHighlightListeners(
@@ -286,19 +295,25 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       y2: y + height / 2
     });
 
-    const topLine = this.createLines({
-      x1: x + width / 2,
-      y1: parentY1,
-      x2: x + width / 2,
-      y2: y
-    });
+    const topLine = this.createLines(
+      {
+        x1: x + width / 2,
+        y1: parentY1,
+        x2: x + width / 2,
+        y2: y
+      },
+      true
+    );
 
-    const bottomLine = this.createLines({
-      x1: x + width / 2,
-      y1: y + height,
-      x2: x + width / 2,
-      y2: parentY2
-    });
+    const bottomLine = this.createLines(
+      {
+        x1: x + width / 2,
+        y1: y + height,
+        x2: x + width / 2,
+        y2: parentY2
+      },
+      true
+    );
 
     const group = new G()
       .add(rect)

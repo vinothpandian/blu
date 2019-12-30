@@ -6,19 +6,8 @@
         [attr.width]="width"
         [attr.height]="height"
       />
-      <g *ngFor="let item of getKeys(boxes)">
-        <rect
-          *ngFor="let box of boxes[item]"
-          [attr.x]="box.x"
-          [attr.y]="box.y"
-          [attr.width]="box.width"
-          [attr.height]="box.height"
-          fill="transparent"
-          stroke="black"
-          stroke-width="1"
-        />
-      </g>
     </svg>
+    <h2 class="mat-h3">Original Image</h2>
   </div>
   <div class="blueprint-area">
     <svg
@@ -27,6 +16,7 @@
       [attr.viewBox]="viewBox"
       class="blueprint-canvas"
     ></svg>
+    <h2 class="mat-h3">Blueprint size: {{ this.width }} x {{ this.height }}</h2>
   </div>
   <div class="tree-area">
     <div class="tree">
