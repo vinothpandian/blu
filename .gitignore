@@ -9,6 +9,8 @@ dist/
 tmp/
 app/**/*.js
 app/**/*.js.map
+ 
+/data/certbot
 
 # dependencies
 node_modules/

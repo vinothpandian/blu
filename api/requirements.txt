@@ -2,3 +2,4 @@ Flask-Cors==3.0.8
 pandas==0.25.3
 pytesseract==0.3.0
 python-dotenv==0.10.3
+gunicorn

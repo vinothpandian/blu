@@ -34,7 +34,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
   imagePath: string = "";
   annotations: Annotations;
-  svgCanvas: Svg;
+  svgCanvas: any;
 
   width = 100;
   height = 100;
@@ -85,7 +85,7 @@ export class ScreensComponent implements OnInit, AfterViewInit {
 
       this.svgCanvas.rect(this.width, this.height).fill(backgroundColor);
 
-      
+
 
       const group = new G().addClass("root").addTo(this.svgCanvas);
 
@@ -208,9 +208,9 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 
   createLines({ x1, y1, x2, y2 }, isVertical = false) {
     const group = new G();
