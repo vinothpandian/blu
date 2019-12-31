@@ -1,13 +1,19 @@
 <div class="screens-container">
   <div class="ui-screen-area">
-    <svg width="360" height="640" [attr.viewBox]="viewBox" class="image-canvas">
+    <svg
+      [class.mat-elevation-z8]="true"
+      width="360"
+      height="640"
+      [attr.viewBox]="viewBox"
+      class="image-canvas"
+    >
       <image
         [attr.href]="imagePath"
         [attr.width]="width"
         [attr.height]="height"
       />
     </svg>
-    <h2 class="mat-h3">Original Image</h2>
+    <h2 class="mat-h3 area-name">Original Image</h2>
   </div>
   <div class="blueprint-area">
     <svg
@@ -15,13 +21,16 @@
       height="640"
       [attr.viewBox]="viewBox"
       class="blueprint-canvas"
+      [class.mat-elevation-z8]="true"
     ></svg>
-    <h2 class="mat-h3">Blueprint size: {{ this.width }} x {{ this.height }}</h2>
+    <h2 class="mat-h3 area-name">
+      Blueprint size: {{ this.width }} x {{ this.height }}
+    </h2>
   </div>
   <div class="tree-area">
     <div class="tree">
       <div class="tree-header">
-        <h4 class="mat-title">UI hierarchy tree</h4>
+        <h4 class="mat-title">UI layout tree</h4>
         <span class="spacer"></span>
         <button
           mat-icon-button
