@@ -2,6 +2,7 @@
   <div
     matRipple
     class="ui-list"
+    [ngClass]="i == filename - 1 ? 'active' : ''"
     *ngFor="let imageName of imageNames; let i = index"
     (click)="listClicked(i)"
   >

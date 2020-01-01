@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "~9.0.0-rc.7",
     "@angular/router": "~9.0.0-rc.7",
     "@svgdotjs/svg.js": "^3.0.16",
+    "dom-to-image": "^2.6.0",
+    "file-saver": "^2.0.2",
     "lodash": "^4.17.15",
     "rxjs": "~6.5.3",
     "shortid": "^2.2.15",

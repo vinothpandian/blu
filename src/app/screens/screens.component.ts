@@ -5,6 +5,9 @@ import { SVG, Svg, Rect, Text, G } from "@svgdotjs/svg.js";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 import { NestedTreeControl } from "@angular/cdk/tree";
 
+import domToImage from "dom-to-image";
+import { saveAs } from "file-saver";
+
 import isEmpty from "lodash/fp/isEmpty";
 import { getElementOutline, backgroundColor } from "../utils/elements";
 
@@ -84,8 +87,6 @@ export class ScreensComponent implements OnInit, AfterViewInit {
       this.svgCanvas.clear();
 
       this.svgCanvas.rect(this.width, this.height).fill(backgroundColor);
-
-
 
       const group = new G().addClass("root").addTo(this.svgCanvas);
 
@@ -208,9 +209,9 @@ export class ScreensComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {}
 
   createLines({ x1, y1, x2, y2 }, isVertical = false) {
     const group = new G();
@@ -369,5 +370,27 @@ export class ScreensComponent implements OnInit, AfterViewInit {
         );
       }
     });
+  }
+
+  downloadBlueprint() {
+    const node = this.svgCanvas.svg();
+    const blob = `data:image/svg+xml;utf8,${escape(node)}`;
+    console.log(node);
+    console.log(blob);
+    saveAs(blob, "blueprint.svg");
+
+    // function filter(node) {
+    //   return node.tagName !== "i";
+    // }
+
+    // console.log(this.svgCanvas.svg());
+
+    // domToImage.toSvg(node, { filter: filter }).then(image => {
+    //   saveAs(image, "blueprint.svg");
+    // });
+  }
+
+  downloadImage() {
+    saveAs(this.imagePath, "original_image.jpg");
   }
 }

@@ -14,6 +14,9 @@
       />
     </svg>
     <h2 class="mat-h3 area-name">Original Image</h2>
+    <button (click)="downloadImage()" mat-raised-button color="primary">
+      Download Image <mat-icon>cloud_download</mat-icon>
+    </button>
   </div>
   <div class="blueprint-area">
     <svg
@@ -26,6 +29,9 @@
     <h2 class="mat-h3 area-name">
       Blueprint size: {{ this.width }} x {{ this.height }}
     </h2>
+    <button (click)="downloadBlueprint()" mat-raised-button color="primary">
+      Download Blueprint <mat-icon>cloud_download</mat-icon>
+    </button>
   </div>
   <div class="tree-area">
     <div class="tree">

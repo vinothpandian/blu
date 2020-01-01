@@ -8,9 +8,14 @@ import { DatasetService } from "../services/dataset.service";
 })
 export class UiListAreaComponent implements OnInit {
   imageNames: string[] = [];
+  filename: number = 1;
   constructor(private datasetService: DatasetService) {
     this.datasetService.imageNames.subscribe(imageNames => {
       this.imageNames = imageNames;
+    });
+
+    this.datasetService.filename.subscribe(filename => {
+      this.filename = filename;
     });
   }
 

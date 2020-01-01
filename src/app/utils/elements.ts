@@ -22,7 +22,6 @@ export const getElementOutline = (
     case "web view":
       return drawWebViews(elementDetails);
     default:
-      console.log(elementDetails?.component);
       return drawAny(elementDetails);
   }
 };

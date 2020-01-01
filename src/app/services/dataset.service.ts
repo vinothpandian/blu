@@ -206,7 +206,6 @@ export class DatasetService {
           annotations.className = "root-screen";
           annotations.children = childrenWithAnnotations;
 
-          console.log(annotations);
           return annotations;
         }),
 
